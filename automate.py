@@ -4,10 +4,11 @@ def run_ssh_commands(ip, username, password, commands, output_file):
     try:
         # Open the SSH connection and execute commands
         with open(output_file, 'w') as file:
+            print("enter")
             for command in commands:
                 full_command = f"sshpass -p {password} ssh {username}@{ip} {command}"
                 result = subprocess.run(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                
+                print("loop --->")
                 # Decode the byte output to a string
                 output_str = result.stdout.decode('utf-8') if result.stdout else result.stderr.decode('utf-8')
                 
