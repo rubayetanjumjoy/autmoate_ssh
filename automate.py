@@ -1,4 +1,4 @@
-import subprocess
+import paramiko
 
 # Server details
 ip_address = "10.21.4.160"
@@ -9,41 +9,36 @@ password = "oXWwe8pZ"
 command = "ls"
 
 try:
-    # Spawn an SSH process
-    ssh_process = subprocess.Popen(
-        f'ssh {username}@{ip_address} "{command}"', 
-        shell=True, 
-        stdin=subprocess.PIPE, 
-        stdout=subprocess.PIPE, 
-        stderr=subprocess.PIPE,
-        universal_newlines=True
-    )
+    # Create an SSH client
+    ssh_client = paramiko.SSHClient()
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-    # Provide the password
-    ssh_process.stdin.write(password + '\n')
-    ssh_process.stdin.flush()
-    print("Successfully SSHed into the server")
+    # Connect to the server
+    ssh_client.connect(ip_address, username=username, password=password)
+    print("gese")
+    # Execute the command
+    stdin, stdout, stderr = ssh_client.exec_command(command)
 
-    # Wait for the process to complete and get output/error
-    stdout, stderr = ssh_process.communicate()
+    # Read the output
+    result = stdout.read().decode('utf-8')
 
     # Print command output
-    print("Standard Output:")
-    print(stdout)
-
-    # Print command error (if any)
-    print("Standard Error:")
-    print(stderr)
+    print(result)
 
     # Save result to a file
     with open("ls_output.txt", "w") as file:
-        file.write(stdout)
+        file.write(result)
 
     print("Command executed successfully.")
 
-except subprocess.CalledProcessError as e:
+except paramiko.AuthenticationException:
+    print("Authentication failed.")
+except paramiko.SSHException as e:
+    print(f"Unable to establish SSH connection: {e}")
+except Exception as e:
     print(f"Error executing command: {e}")
 
 finally:
-    # No need to explicitly close the SSH process here
-    pass
+    # Close the SSH connection
+    if ssh_client:
+        ssh_client.close()
