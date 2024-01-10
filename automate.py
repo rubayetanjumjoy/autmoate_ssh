@@ -33,7 +33,7 @@ try:
         # Send each command
         ssh_process.stdin.write(command + '\n')
         ssh_process.stdin.flush()
-
+        print(command)
         # Wait for the command to complete
         ssh_process.wait()
 
