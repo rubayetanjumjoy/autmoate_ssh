@@ -15,7 +15,7 @@ try:
 
     # Connect to the server
     ssh_client.connect(ip_address, username=username, password=password)
-    print("gese")
+
     # Execute the command
     stdin, stdout, stderr = ssh_client.exec_command(command)
 
