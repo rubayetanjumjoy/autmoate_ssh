@@ -28,20 +28,24 @@ try:
     # Provide the password
     ssh_process.stdin.write(password + '\n')
     ssh_process.stdin.flush()
-    print("successfully ssh in the server")
+    print("Successfully SSHed into the server")
+
     for command in commands:
         # Send each command
         ssh_process.stdin.write(command + '\n')
         ssh_process.stdin.flush()
-        print(command)
-        # Wait for the command to complete
-        ssh_process.wait()
+
+        # Read the output
+        result = ssh_process.stdout.read()
+
+        # Print command output
+        print(result)
 
         # Save result only for 'show mac-address-table'
         if command.startswith("show mac-address-table"):
             with open("mac_address_table.txt", "a") as file:
                 file.write(f"\nCommand: {command}\n")
-                file.write(ssh_process.stdout.read())
+                file.write(result)
 
     print("Commands executed successfully.")
 
