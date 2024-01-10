@@ -1,0 +1,11 @@
+ Volume in drive C is Windows
+ Volume Serial Number is B649-89C5
+
+ Directory of C:\Users\QuaziRubayetAnjumJoy\Desktop\CodeBase\Testing\Terminal Automate
+
+01/10/2024  11:26 AM    <DIR>          .
+01/10/2024  11:22 AM    <DIR>          ..
+01/10/2024  11:25 AM               597 automate.py
+01/10/2024  11:26 AM                 0 file.txt
+               2 File(s)            597 bytes
+               2 Dir(s)  401,625,128,960 bytes free
