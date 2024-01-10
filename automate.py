@@ -1,45 +1,20 @@
 import subprocess
 
-# Server details
-ip_address = "10.21.4.160"
-username = "leon.paingheinh"
-password = "oXWwe8pZ"
+# Specify the file name where you want to save the ls command output
+output_file = 'ls_output.txt'
 
-# Command to be executed
-command = "ls"
-
+# Using subprocess to run the ls command and capture the output
 try:
-    # Spawn an SSH process
-    ssh_process = subprocess.Popen(
-        f'ssh {username}@{ip_address} "{command}"', 
-        shell=True, 
-        stdin=subprocess.PIPE, 
-        stdout=subprocess.PIPE, 
-        stderr=subprocess.PIPE,
-        universal_newlines=True
-    )
+    # Run the ls command with subprocess and capture the output
+    ls_output = subprocess.check_output(['ls'], text=True)
 
-    # Provide the password
-    ssh_process.stdin.write(password + '\n')
-    ssh_process.stdin.flush()
-    print("Successfully SSHed into the server")
+    # Write the output to the specified file
+    with open(output_file, 'w') as file:
+        file.write(ls_output)
 
-    # Read the output
-    result = ssh_process.stdout.read()
-
-    # Print command output
-    print(result)
-
-    # Save result to a file
-    with open("ls_output.txt", "w") as file:
-        file.write(result)
-
-    print("Command executed successfully.")
+    print(f"ls command output successfully written to {output_file}")
 
 except subprocess.CalledProcessError as e:
-    print(f"Error executing command: {e}")
-
-finally:
-    # Close the SSH process
-    if ssh_process:
-        ssh_process.communicate()
+    print(f"Error while running ls command: {e}")
+except IOError as e:
+    print(f"Error writing to file {output_file}: {e}")
