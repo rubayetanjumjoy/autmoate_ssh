@@ -28,7 +28,7 @@ try:
     # Provide the password
     ssh_process.stdin.write(password + '\n')
     ssh_process.stdin.flush()
-
+    print("successfully ssh in the server")
     for command in commands:
         # Send each command
         ssh_process.stdin.write(command + '\n')
