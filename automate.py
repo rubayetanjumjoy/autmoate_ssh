@@ -1,10 +1,37 @@
-import subprocess
+import paramiko
 
-# Run the 'ls' command
-result = subprocess.run(['ls'], stdout=subprocess.PIPE, text=True)
+# SSH connection parameters
+hostname = '10.21.4.160'
+port = 22
+username = 'leon.paingheinh'
+password = 'oXWwe8pZ'
 
-# Save the output to a text file
-with open('ls_output.txt', 'w') as file:
-    file.write(result.stdout)
+# Create an SSH client
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-print("ls command output has been saved to ls_output.txt")
+try:
+    # Connect to the SSH server
+    ssh.connect(hostname, port=port, username=username, password=password)
+
+    # List of commands to execute
+    commands = [
+        'enable',
+        'show version',
+        'show running-config',
+        'show interface brief',
+        'show mac-address-table',
+    ]
+
+    # Execute commands and save output to a text file
+    with open('ssh_commands_output.txt', 'w') as output_file:
+        for command in commands:
+            stdin, stdout, stderr = ssh.exec_command(command)
+            output = stdout.read().decode('utf-8')
+            output_file.write(f"\n===== {command} =====\n{output}\n")
+
+    print("Commands executed successfully. Output saved to ssh_commands_output.txt")
+
+finally:
+    # Close the SSH connection
+    ssh.close()
